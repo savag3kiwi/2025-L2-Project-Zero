@@ -1,31 +1,48 @@
 # Functions go here
-def string_check(question, valid_ans_list, num_letters):
-    """Checks that users enter the full word
-    or the 'n' letter/s of a word from a list of valid responses"""
+def num_check(question, num_type, exit_code=None):
+    """Checks that users enter an integer / float that is more than
+    zero (or the optional exit code)"""
+
+    if num_type == "integer":
+        error = "Oops - please enter a number more than zero."
+        change_to = int
+
+    else:
+        error = "Oops - please enter a number more than zero."
+        change_to = float
 
     while True:
-
         response = input(question).lower()
 
-        for item in valid_ans_list:
+        # check for the exit code
+        if response == exit_code:
+            return response
 
-            # check if the response is the entire word
-            if response == item:
-                return item
+        try:
+            # Change the response to an integer and check that it's more than zero
+            response = change_to(response)
 
-            # check if it's the 'n' letters
-            elif response == item[:num_letters]:
-                return item
+            if response > 0:
+                return response
+            else:
+                print(error)
 
-        print(f"Please choose an option from {valid_ans_list}")
+        except ValueError:
+            print(error)
 
 
 # Main routine goes here
-yes_no_list = ['yes', 'no']
-payment_list = ['cash', 'credit']
 
-like_coffee = string_check("Do you like coffee? ",
-                           yes_no_list, 1)
-print(f"You chose {like_coffee}")
-pay_method = string_check("Payment method: ", payment_list, 2)
-print(f"You chose {pay_method}")
+# loop for testing purposes
+while True:
+    print()
+
+    my_float = num_check("Please enter a number more than 0: ", "float")
+    print(f"Thanks. You chose {my_float}")
+    print()
+    my_int = num_check("Please enter an integer more than 0: ",
+                       "integer", "")
+    if my_int == "":
+        print("You have chosen infinite mode.")
+    else:
+        print(f"Thanks. You chose {my_int}")
